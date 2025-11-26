@@ -142,10 +142,10 @@ export default function ParentDashboard() {
       });
 
     if (error) {
-      toast.error('Kunne ikke sende hentingsvarsel');
+      toast.error('Kunne ikke sende forespørsel');
     } else {
-      toast.success('Hentingsvarsel sendt!', {
-        description: 'Personalet vil godkjenne hentingen.',
+      toast.success('Henteforespørsel sendt!', {
+        description: 'Venter på godkjenning fra personalet.',
       });
       setSelectedPickup('');
     }
