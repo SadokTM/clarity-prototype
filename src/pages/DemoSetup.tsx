@@ -16,58 +16,31 @@ export default function DemoSetup() {
     setIsLoading(true);
 
     try {
-      // Insert demo children
-      const { data: children, error: childrenError } = await supabase
-        .from('children')
-        .insert([
-          { name: 'Emma Hansen', birth_date: '2019-03-15' },
-          { name: 'Lucas Olsen', birth_date: '2020-07-22' },
-          { name: 'Sofia Berg', birth_date: '2018-11-08' },
-        ])
-        .select();
-
-      if (childrenError) throw childrenError;
-
-      // Link first child to current user
-      if (children && children.length > 0) {
-        const { error: linkError } = await supabase
-          .from('parent_children')
-          .insert({
-            parent_id: user.id,
-            child_id: children[0].id,
-            relationship: 'Forelder',
-            is_primary: true,
-          });
-
-        if (linkError) throw linkError;
-
-        // Add authorized pickups for the child
-        await supabase
-          .from('authorized_pickups')
-          .insert([
-            {
-              child_id: children[0].id,
-              name: 'Mormor Anne',
-              relationship: 'Besteforelder',
-              phone: '987 65 432',
-            },
-            {
-              child_id: children[0].id,
-              name: 'Tante Lisa',
-              relationship: 'Tante',
-              phone: '456 78 901',
-            },
-          ]);
+      const { data: session } = await supabase.auth.getSession();
+      
+      if (!session?.session?.access_token) {
+        throw new Error('Ingen gyldig sesjon funnet');
       }
+
+      const { data, error } = await supabase.functions.invoke('setup-demo', {
+        headers: {
+          Authorization: `Bearer ${session.session.access_token}`,
+        },
+      });
+
+      if (error) throw error;
 
       toast.success('Demodata opprettet!', {
         description: 'Du kan nå teste alle funksjoner',
       });
       
-      window.location.reload();
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 1000);
     } catch (error: any) {
+      console.error('Demo setup error:', error);
       toast.error('Kunne ikke opprette demodata', {
-        description: error.message,
+        description: error.message || 'Prøv igjen senere',
       });
     } finally {
       setIsLoading(false);
