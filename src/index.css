@@ -15,40 +15,40 @@ All colors MUST be HSL.
     --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
-    
-    /* Primary - Vibrant Blue/Purple */
-    --primary: 250 95% 65%;
+
+    /* Primary - Warm Yellow/Orange */
+    --primary: 40 95% 60%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 270 90% 70%;
-    
-    /* Secondary - Soft Purple */
-    --secondary: 260 60% 92%;
-    --secondary-foreground: 260 70% 25%;
-    
+    --primary-glow: 40 95% 70%;
+
+    /* Secondary - Fresh Green */
+    --secondary: 100 70% 45%;
+    --secondary-foreground: 0 0% 100%;
+
     /* Muted - Glassmorphic Surfaces */
     --muted: 220 20% 94%;
     --muted-foreground: 220 15% 45%;
-    
-    /* Accent - Cyan */
-    --accent: 190 95% 60%;
-    --accent-foreground: 0 0% 100%;
-    
+
+    /* Accent - Sunny Yellow */
+    --accent: 50 95% 65%;
+    --accent-foreground: 222 47% 11%;
+
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    
+
     /* Glass Borders */
     --border: 220 20% 88%;
     --input: 220 20% 90%;
-    --ring: 250 95% 65%;
-    
+    --ring: 40 95% 60%;
+
     --radius: 1rem;
-    
+
     --success: 142 76% 36%;
     --success-foreground: 0 0% 100%;
     --warning: 43 96% 56%;
     --warning-foreground: 215 25% 27%;
     --info: 201 96% 32%;
-    
+
     /* Glassmorphism Variables */
     --glass-bg: 0 0% 100% / 0.4;
     --glass-border: 0 0% 100% / 0.2;
@@ -62,33 +62,33 @@ All colors MUST be HSL.
     --card-foreground: 210 40% 98%;
     --popover: 222 47% 11%;
     --popover-foreground: 210 40% 98%;
-    
+
     --primary: 250 95% 65%;
     --primary-foreground: 0 0% 100%;
     --primary-glow: 270 90% 70%;
-    
+
     --secondary: 260 50% 20%;
     --secondary-foreground: 260 80% 85%;
-    
+
     --muted: 217 33% 17%;
     --muted-foreground: 215 20% 65%;
-    
+
     --accent: 190 95% 55%;
     --accent-foreground: 0 0% 100%;
-    
+
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
-    
+
     --border: 217 33% 17%;
     --input: 217 33% 17%;
     --ring: 250 95% 65%;
-    
+
     --success: 142 76% 36%;
     --success-foreground: 0 0% 100%;
     --warning: 43 96% 56%;
     --warning-foreground: 215 25% 27%;
     --info: 201 96% 32%;
-    
+
     /* Dark mode glass */
     --glass-bg: 222 47% 11% / 0.5;
     --glass-border: 0 0% 100% / 0.1;
@@ -137,4 +137,27 @@ All colors MUST be HSL.
     transition-duration: 200ms;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
+
+  .bg-blurred {
+    filter: blur(4px);
+    -webkit-filter: blur(4px);
+  }
+}
+
+@keyframes pulse-slow {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 10s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }

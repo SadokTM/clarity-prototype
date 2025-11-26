@@ -1,3 +1,4 @@
+import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -65,12 +66,12 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <Routes>
-            <Route path="/auth" element={<Auth />} />
+             <Route path="/auth" element={<Auth />} />
             <Route path="/demo-setup" element={
               <ProtectedRoute>
                 <DemoSetup />
               </ProtectedRoute>
-            } />
+            } /> */
             <Route
               path="/"
               element={

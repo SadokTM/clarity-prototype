@@ -190,31 +190,30 @@ export default function ParentDashboard() {
               </div>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="glass p-4 rounded-xl border border-white/20 space-y-3">
-                <h3 className="font-semibold text-foreground">Kom i gang:</h3>
-                <ol className="space-y-2 text-sm text-muted-foreground">
-                  <li className="flex gap-2">
-                    <span className="font-semibold text-primary">1.</span>
-                    <span>Kontakt barnehagens administrator for å registrere ditt barn</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="font-semibold text-primary">2.</span>
-                    <span>Administrator kobler ditt barn til din bruker</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="font-semibold text-primary">3.</span>
-                    <span>Du kan da begynne å sende henteforespørsler</span>
-                  </li>
-                </ol>
+              <div className="p-5 rounded-xl border-2 border-primacy/20 bg-primary/5 space-y-4">
+              <h3 className="font-bold text-xl text-foreground">Slik kommer du i gang!</h3>
+              <ol className="space-y-3 text-base">
+                <li className="flex gap-2 items-start">
+                  <span className="font-bold text-primary text-lg">1.</span>  
+                  <span className="text-gray-700">Kontakt barnehagen for å registrere ditt barn.</span>
+                </li>
+                <li className="flex gap-2 items-start">
+                  <span className="font-bold text-primary text-øg">2.</span>
+                  <span className="text-gray-700">Barnehagen vil sende informasjon om barnet til deg.</span>
+                </li>
+                <li className="flex gap-2 item-start">
+                  <span className="font-bold text-primary text-lg">3.</span>
+                  <span className="text-gray-700">Du får tilgang til å melde henting fra denne siden.</span>
+                </li>
+              </ol>
               </div>
-              
-              <Button 
-                onClick={() => window.location.href = '/demo-setup'} 
-                className="w-full bg-gradient-accent hover:shadow-glow"
-                size="lg"
-              >
-                Last inn demodata for testing
-              </Button>
+
+            <Button 
+              variant="outline"
+              className="w-full h-12 textbase border-2 border-primacy/50 text-primacy hover:bg-primacy/10 hover:bg-success/10 hover:border-success/50 hover:text-success transition-colors"
+            >
+              Ring Barnehagen (Kontakt oss)
+            </Button>
               
               <p className="text-xs text-center text-muted-foreground">
                 Demodata lar deg teste systemet med eksempel-barn og hentere
@@ -279,7 +278,7 @@ export default function ParentDashboard() {
                 onClick={() => setSelectedChild(child.id)}
                 className={`flex flex-col items-center gap-3 p-4 rounded-2xl transition-all min-w-[120px] hover:scale-105 ${
                   selectedChild === child.id
-                    ? 'bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-glow-primary scale-105'
+                    ? 'bg-gradient-to-br from-primary to-accent text-primary-foreground shadow-glow-primary scale-105'
                     : 'bg-card hover:bg-accent border-2 border-transparent hover:border-primary/20 shadow-soft'
                 }`}
               >
@@ -340,8 +339,8 @@ export default function ParentDashboard() {
                         <Users className="w-6 h-6" />
                       </div>
                       <div className="text-center">
-                        <div className="font-bold text-sm">{pickup.name.split(' ')[0]}</div>
-                        <div className="text-xs opacity-70">{pickup.relationship}</div>
+                        <div className="font-bold text-base">{pickup.name.split(' ')[0]}</div>
+                        <div className="text-sm opacity-90">{pickup.relationship}</div>
                       </div>
                     </div>
                   </button>

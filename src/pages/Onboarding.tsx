@@ -86,6 +86,7 @@ export default function Onboarding() {
             {roles.map((role) => {
               const Icon = role.icon;
               const isSelected = selectedRole === role.value;
+              const isParent = role.value === 'parent';
               
               return (
                 <button
@@ -93,8 +94,10 @@ export default function Onboarding() {
                   onClick={() => setSelectedRole(role.value)}
                   className={`p-6 rounded-lg border-2 transition-all text-left ${
                     isSelected
-                      ? `border-${role.color} bg-${role.color}/5`
-                      : 'border-border hover:border-muted-foreground/50'
+                      ? `border-${role.color} bg-${role.color}/5 ring-4 ring-${role.color}/10 shadow-lg`
+                      : isParent
+                        ? 'border-primacy/50 hover:border-primacy/80 bg-primacy/5'
+                        : 'border-border hover:border-muted-foreground/50'
                   }`}
                 >
                   <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-4 ${
@@ -105,7 +108,7 @@ export default function Onboarding() {
                     }`} />
                   </div>
                   <h3 className="font-semibold mb-2">{role.label}</h3>
-                  <p className="text-sm text-muted-foreground">{role.description}</p>
+                  <p className="text-base text-muted-foreground">{role.description}</p>
                 </button>
               );
             })}

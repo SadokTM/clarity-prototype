@@ -284,7 +284,8 @@ export default function EmployeeDashboard() {
                         className="h-16 px-6 border-2 border-destructive/20 hover:bg-destructive/10 hover:scale-[1.02] transition-all"
                         size="lg"
                       >
-                        <XCircle className="w-6 h-6 text-destructive" />
+                        <XCircle className="w-6 h-6 text-destructive mr-2" />
+                        Avbryt
                       </Button>
                     </div>
                   </CardContent>
