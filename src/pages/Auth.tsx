@@ -147,7 +147,7 @@ export default function Auth() {
                 </div>
                 
                 <div className="glass p-3 rounded-xl border border-white/20 text-sm text-muted-foreground">
-                  <p>📋 Du registreres som <span className="font-semibold text-foreground">forelder</span>.</p>
+                  <p>Du registreres som <span className="font-semibold text-foreground">forelder</span>.</p>
                   <p className="text-xs mt-1">Kontakt administrator hvis du trenger andre tilganger.</p>
                 </div>
                 
