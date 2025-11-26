@@ -1,73 +1,152 @@
-# Welcome to your Lovable project
+# Krysselista - Digital henteløsning for barnehager
 
-## Project info
+## 📋 Om prosjektet
 
-**URL**: https://lovable.dev/projects/6e79645e-7a75-4009-ad18-25d94ea849e5
+Krysselista er en sikker og brukervennlig applikasjon for barnehager som digitaliserer henteprosessen. Foreldre sender henteforespørsler digitalt, og barnehagepersonalet godkjenner disse før barn utleveres.
 
-## How can I edit this code?
+## ✨ Hovedfunksjoner
 
-There are several ways of editing your application.
+- **For foreldre**: Send henteforespørsel med valg av hvem som skal hente
+- **For ansatte**: Oversikt over ventende forespørsler og godkjenning
+- **Sikkerhet**: RBAC (rollebasert tilgang), RLS (Row Level Security), GDPR-compliant
+- **Sanntid**: Real-time notifikasjoner når forespørsler godkjennes
 
-**Use Lovable**
+## 🏗️ Teknologier
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/6e79645e-7a75-4009-ad18-25d94ea849e5) and start prompting.
+### Frontend
+- **React 18** med TypeScript
+- **Vite** (build tool)
+- **Tailwind CSS** + **shadcn/ui** (design system)
+- **React Router** (navigasjon)
+- **React Query** (data fetching)
 
-Changes made via Lovable will be committed automatically to this repo.
+### Backend (Lovable Cloud / Supabase)
+- **PostgreSQL** database
+- **Supabase Auth** (autentisering)
+- **Row Level Security** (RLS policies)
+- **Edge Functions** (serverless)
+- **Realtime** (sanntids-oppdateringer)
 
-**Use your preferred IDE**
+## 📊 Database-struktur
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- `profiles` - Brukerprofiler
+- `user_roles` - Roller (parent/employee/admin)
+- `children` - Barn i barnehagen
+- `parent_children` - Forelder-barn-relasjoner
+- `authorized_pickups` - Godkjente hentepersoner
+- `pickup_logs` - Henteforespørsler og status
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 🚀 Kom i gang
 
-Follow these steps:
+### Forutsetninger
+- Node.js (anbefalt via [nvm](https://github.com/nvm-sh/nvm))
+- npm eller bun
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Installasjon
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+```bash
+# Klon repositoriet
+git clone https://github.com/Aleks1712/clarity-prototype.git
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Gå til prosjektmappen
+cd clarity-prototype
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Installer avhengigheter
+npm install
+
+# Start utviklingsserver
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Appen kjører på `http://localhost:8080`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Miljøvariabler
 
-**Use GitHub Codespaces**
+Prosjektet bruker Lovable Cloud, så følgende variabler er forhåndskonfigurert i `.env`:
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_PUBLISHABLE_KEY`
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+For lokal utvikling: disse hentes automatisk fra Lovable Cloud.
 
-## What technologies are used for this project?
+## 👥 Brukerroller og testing
 
-This project is built with:
+### Opprett testbrukere
+1. Registrer deg på `/auth`
+2. Velg rolle på `/onboarding`:
+   - **Parent** (forelder)
+   - **Employee** (ansatt)
+   - **Admin** (administrator)
+3. Gå til `/demo-setup` for å generere testdata
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Testflyt
+1. **Som forelder**: Velg barn → Velg hvem som henter → Send forespørsel
+2. **Som ansatt**: Se ventende forespørsler → Godkjenn
+3. **Som forelder**: Få sanntids-notifikasjon om godkjenning
 
-## How can I deploy this project?
+## 🔐 Sikkerhet
 
-Simply open [Lovable](https://lovable.dev/projects/6e79645e-7a75-4009-ad18-25d94ea849e5) and click on Share -> Publish.
+- ✅ GDPR-compliant datalagring i EU
+- ✅ Passord hashet via Supabase Auth
+- ✅ RBAC (Role-Based Access Control)
+- ✅ RLS policies på alle databasetabeller
+- ✅ Logging av alle hentinger
+- ✅ Ingen produksjonsdata i kodebase
 
-## Can I connect a custom domain to my Lovable project?
+## 📁 Prosjektstruktur
 
-Yes, you can!
+```
+clarity-prototype/
+├── src/
+│   ├── components/      # UI-komponenter (shadcn)
+│   ├── contexts/        # React contexts (AuthContext)
+│   ├── hooks/           # Custom hooks
+│   ├── integrations/    # Supabase client
+│   ├── pages/           # Sider (Auth, Dashboard, etc.)
+│   └── lib/             # Utilities
+├── supabase/
+│   ├── functions/       # Edge functions
+│   ├── migrations/      # Database migrations
+│   └── config.toml      # Supabase config
+└── public/              # Statiske filer
+```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🛠️ Utvikling
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+### Tilgjengelige scripts
+```bash
+npm run dev          # Start utviklingsserver
+npm run build        # Bygg for produksjon
+npm run preview      # Preview production build
+npm run lint         # Kjør ESLint
+```
+
+### Kode-konvensjoner
+- **TypeScript** for type-sikkerhet
+- **Tailwind** semantic tokens (bruk design system fra `index.css`)
+- **shadcn/ui** komponenter (ikke vanlig CSS)
+- **React Query** for server state
+
+## 🚢 Deployment
+
+Prosjektet deployes automatisk via Lovable:
+1. Gå til [Lovable-editoren](https://lovable.dev/projects/6e79645e-7a75-4009-ad18-25d94ea849e5)
+2. Klikk **Share** → **Publish**
+3. Frontend publiseres automatisk
+4. Backend (edge functions, migrations) deployes automatisk
+
+## 🤝 Bidra
+
+Dette er et studentprosjekt for fullstack-utvikling. Kontakt eier for tilgang.
+
+## 📝 Lisens
+
+Privat prosjekt - Ikke for kommersiell bruk
+
+## 🔗 Lenker
+
+- **Lovable Project**: [https://lovable.dev/projects/6e79645e-7a75-4009-ad18-25d94ea849e5](https://lovable.dev/projects/6e79645e-7a75-4009-ad18-25d94ea849e5)
+- **Live demo**: Publiser via Lovable for offentlig URL
+
+---
+
+**Laget med ❤️ ved hjelp av Lovable**
