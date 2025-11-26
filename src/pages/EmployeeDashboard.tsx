@@ -30,6 +30,7 @@ export default function EmployeeDashboard() {
   const [pendingPickups, setPendingPickups] = useState<PickupRequest[]>([]);
   const [approvedPickups, setApprovedPickups] = useState<PickupRequest[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [totalChildren, setTotalChildren] = useState(0);
   const [notificationsEnabled, setNotificationsEnabled] = useState(
     typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted'
   );
@@ -87,8 +88,14 @@ export default function EmployeeDashboard() {
       .order('approved_at', { ascending: false })
       .limit(10);
 
+    // Fetch total children count
+    const { count } = await supabase
+      .from('children')
+      .select('*', { count: 'exact', head: true });
+
     if (pending) setPendingPickups(pending as any);
     if (approved) setApprovedPickups(approved as any);
+    if (count !== null) setTotalChildren(count);
   };
 
   const handleApprove = async (pickupId: string) => {
@@ -177,6 +184,28 @@ export default function EmployeeDashboard() {
       </div>
 
       <div className="container max-w-4xl mx-auto px-4 py-6">
+        {/* Quick Stats */}
+        <div className="grid grid-cols-3 gap-3 mb-6">
+          <Card className="border-2 hover:shadow-lg transition-all">
+            <CardContent className="pt-6 text-center">
+              <div className="text-3xl font-bold text-primary mb-1">{totalChildren}</div>
+              <p className="text-sm text-muted-foreground font-medium">Barn totalt</p>
+            </CardContent>
+          </Card>
+          <Card className="border-2 border-warning/20 bg-warning/5 hover:shadow-lg transition-all">
+            <CardContent className="pt-6 text-center">
+              <div className="text-3xl font-bold text-warning mb-1">{pendingPickups.length}</div>
+              <p className="text-sm text-muted-foreground font-medium">Ventende</p>
+            </CardContent>
+          </Card>
+          <Card className="border-2 border-success/20 bg-success/5 hover:shadow-lg transition-all">
+            <CardContent className="pt-6 text-center">
+              <div className="text-3xl font-bold text-success mb-1">{approvedPickups.length}</div>
+              <p className="text-sm text-muted-foreground font-medium">Godkjente i dag</p>
+            </CardContent>
+          </Card>
+        </div>
+
         <Tabs defaultValue="pending" className="space-y-4">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="pending" className="relative">

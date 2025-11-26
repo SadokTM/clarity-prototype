@@ -29,6 +29,7 @@ export default function ParentDashboard() {
   const [authorizedPickups, setAuthorizedPickups] = useState<AuthorizedPickup[]>([]);
   const [selectedPickup, setSelectedPickup] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [lastPickup, setLastPickup] = useState<{ name: string; time: string } | null>(null);
   const [notificationsEnabled, setNotificationsEnabled] = useState(
     typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted'
   );
@@ -49,8 +50,32 @@ export default function ParentDashboard() {
   useEffect(() => {
     if (selectedChild) {
       fetchAuthorizedPickups(selectedChild);
+      fetchLastPickup(selectedChild);
     }
   }, [selectedChild]);
+
+  const fetchLastPickup = async (childId: string) => {
+    const { data } = await supabase
+      .from('pickup_logs')
+      .select('pickup_person_name, approved_at')
+      .eq('child_id', childId)
+      .eq('status', 'approved')
+      .order('approved_at', { ascending: false })
+      .limit(1)
+      .single();
+
+    if (data) {
+      setLastPickup({
+        name: data.pickup_person_name,
+        time: new Date(data.approved_at).toLocaleDateString('nb-NO', { 
+          day: 'numeric', 
+          month: 'short',
+          hour: '2-digit',
+          minute: '2-digit'
+        })
+      });
+    }
+  };
 
   const fetchChildren = async () => {
     if (!user) return;
@@ -249,26 +274,55 @@ export default function ParentDashboard() {
             {/* Who Picks Up - LARGE BUTTONS */}
             <div className="space-y-3">
               <label className="text-lg font-bold">Hvem henter?</label>
-              <Select value={selectedPickup} onValueChange={setSelectedPickup}>
-                <SelectTrigger className="w-full h-16 text-lg border-2">
-                  <SelectValue placeholder="Velg person" />
-                </SelectTrigger>
-                <SelectContent>
-                  {authorizedPickups.map((pickup) => (
-                    <SelectItem key={pickup.id} value={pickup.id} className="h-14 text-base">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                          <Users className="w-5 h-5" />
-                        </div>
-                        <div className="text-left">
-                          <div className="font-bold">{pickup.name}</div>
-                          <div className="text-sm text-muted-foreground">{pickup.relationship}</div>
-                        </div>
+              
+              {/* Quick selection buttons for first 3 people */}
+              <div className="grid grid-cols-3 gap-2">
+                {authorizedPickups.slice(0, 3).map((pickup) => (
+                  <button
+                    key={pickup.id}
+                    onClick={() => setSelectedPickup(pickup.id)}
+                    className={`p-4 rounded-xl border-2 transition-all hover:scale-105 ${
+                      selectedPickup === pickup.id
+                        ? 'bg-primary text-primary-foreground border-primary shadow-glow-primary'
+                        : 'bg-card border-border hover:border-primary/30 shadow-soft'
+                    }`}
+                  >
+                    <div className="flex flex-col items-center gap-2">
+                      <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                        selectedPickup === pickup.id ? 'bg-primary-foreground/20' : 'bg-primary/10'
+                      }`}>
+                        <Users className="w-6 h-6" />
                       </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                      <div className="text-center">
+                        <div className="font-bold text-sm">{pickup.name.split(' ')[0]}</div>
+                        <div className="text-xs opacity-70">{pickup.relationship}</div>
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+
+              {/* Show select if more than 3 people */}
+              {authorizedPickups.length > 3 && (
+                <Select value={selectedPickup} onValueChange={setSelectedPickup}>
+                  <SelectTrigger className="w-full h-14 text-base border-2">
+                    <SelectValue placeholder="Eller velg annen person" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {authorizedPickups.slice(3).map((pickup) => (
+                      <SelectItem key={pickup.id} value={pickup.id} className="h-12 text-base">
+                        <div className="flex items-center gap-3">
+                          <Users className="w-5 h-5" />
+                          <div className="text-left">
+                            <div className="font-bold">{pickup.name}</div>
+                            <div className="text-xs text-muted-foreground">{pickup.relationship}</div>
+                          </div>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
             </div>
 
             {/* MAIN ACTION BUTTON - EXTRA LARGE & BEAUTIFUL */}
@@ -296,6 +350,27 @@ export default function ParentDashboard() {
             </p>
           </CardContent>
         </Card>
+
+        {/* Last Pickup Info */}
+        {lastPickup && (
+          <Card className="bg-muted/30 border-muted">
+            <CardContent className="pt-4 pb-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center">
+                    <CheckCircle2 className="w-5 h-5 text-success" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">Siste henting</p>
+                    <p className="text-xs text-muted-foreground">
+                      {lastPickup.name} • {lastPickup.time}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Info Card - SIMPLE 3-STEP */}
         <Card className="bg-success/5 border-success/20">
